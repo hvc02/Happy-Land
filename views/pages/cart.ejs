@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="row">
+    <a href="/products" class="navbar-brand">Happy Land</a>
+  </div>
+
+  <div class="row">
+    <h1 class="sub-title">Your Shopping Cart</h1>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8">
+      <% if (items == 0 || items.totalQty == 0 ) { -%>
+      <h3>Sorry, no items in your cart</h3>
+      <% } else { -%>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Remove item</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% Object.keys(items).forEach( function(item) { %>
+          <tr>
+            <td><%= items[item].product.name %></td>
+            <td>
+              <form action="/update-cart-item" method="post">
+                <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+                <select class="custom-select mr-2" name="quantity">
+                  <option value="<%= items[item].qty %>" selected>
+                    <%= items[item].qty %>
+                  </option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+                <input
+                  type="hidden"
+                  name="productId"
+                  value="<%= items[item].product.id %>"
+                />
+                <button type="submit" class="btn btn-primary">Update</button>
+              </form>
+            </td>
+            <td><%= items[item].product.price * items[item].qty%></td>
+            <td>
+              <a
+                class="btn btn-danger"
+                href="/remove-item/<%= items[item].product.id %>"
+                >Remove</a
+              >
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } -%>
+    </div>
+  </div>
+</div>
